@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.function.Function;
 
 @Component
-public class JavaUtil {
+public class JwtUtil {
     private String SECRET_KEY = "secret";
 
     public String extractUsername(String token){
