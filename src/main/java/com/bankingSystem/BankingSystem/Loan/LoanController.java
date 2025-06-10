@@ -17,7 +17,7 @@ public class LoanController {
 
     @PostMapping("/create")
     public ResponseEntity<Loan> createLoan(@RequestBody Loan loan){
-        return new ResponseEntity<>(serviceLoan.save(loan), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping("/user/{UserId}")
