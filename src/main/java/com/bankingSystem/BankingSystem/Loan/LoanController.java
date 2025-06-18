@@ -1,7 +1,5 @@
 package com.bankingSystem.BankingSystem.Loan;
 
-import com.bankingSystem.BankingSystem.TransactionManagement.IServiceTransaction;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,32 +15,30 @@ public class LoanController {
 
     @PostMapping("/create")
     public ResponseEntity<Loan> createLoan(@RequestBody Loan loan){
-        return new ResponseEntity<>(serviceLoan.save(loan), HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).body(serviceLoan.save(loan));
     }
 
     @GetMapping("/user/{UserId}")
     public ResponseEntity<List<Loan>> getLoansByUserId(@PathVariable Long userId){
         return serviceLoan.getLoansByUserId(userId)
-                .map(loan -> new ResponseEntity<>(loan, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
+                .map(loan -> ResponseEntity.ok(loan))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @GetMapping
     public ResponseEntity<List<Loan>> getAllLoans(){
-        return new ResponseEntity<>(serviceLoan.getAllLoans(), HttpStatus.OK);
+        return ResponseEntity.ok(serviceLoan.getAllLoans());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Loan> getLoanBYId(@PathVariable Long id){
         return serviceLoan.getLoanById(id)
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
+                .map(value -> ResponseEntity.ok(value))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Loan> updateLoanStatus(@PathVariable Long id, @RequestBody String status){
-        return new ResponseEntity<>(serviceLoan.updateLoanStatus(id, status), HttpStatus.OK);
+        return ResponseEntity.ok(serviceLoan.updateLoanStatus(id, status));
     }
 }
-
-
