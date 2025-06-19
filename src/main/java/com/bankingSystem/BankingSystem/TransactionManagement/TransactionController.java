@@ -15,25 +15,25 @@ public class TransactionController {
 
     @PostMapping("/create")
     public ResponseEntity<Transaction> createTransaction(@RequestBody Transaction transaction){
-        return new ResponseEntity<>(serviceTransaction.save(transaction), HttpStatus.OK);
+        return ResponseEntity.ok(serviceTransaction.save(transaction));
     }
 
     @GetMapping("/account/{accountId}")
     public ResponseEntity<List<Transaction>> getTransactionByAccountId(@PathVariable Long accountId){
-        return  serviceTransaction.getTransactionByAccountId(accountId)
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
+        return serviceTransaction.getTransactionByAccountId(accountId)
+                .map(value -> ResponseEntity.ok(value))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @GetMapping
     public ResponseEntity<List<Transaction>> getAllTransactions(){
-        return new ResponseEntity<>(serviceTransaction.getAllTransactions(), HttpStatus.OK);
+        return ResponseEntity.ok(serviceTransaction.getAllTransactions());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Transaction> getTransactionById(@PathVariable Long id){
-        return  serviceTransaction.getTransactionById(id)
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
+        return serviceTransaction.getTransactionById(id)
+                .map(value -> ResponseEntity.ok(value))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 }
