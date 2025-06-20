@@ -6,7 +6,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/appUsers")
@@ -15,19 +14,19 @@ public class AppUserController {
     private IServiceAppUser serviceAppUser;
 
     @PostMapping("/register")
-    public ResponseEntity<AppUser>  registerAppUser(@RequestBody AppUser appUser){
-        return new ResponseEntity<>(serviceAppUser.save(appUser), HttpStatus.CREATED);
+    public ResponseEntity<AppUser> registerAppUser(@RequestBody AppUser appUser){
+        return ResponseEntity.status(HttpStatus.CREATED).body(serviceAppUser.save(appUser));
     }
 
     @GetMapping("/{appUser}")
     public ResponseEntity<AppUser> getUserByUsername(@PathVariable String appUser){
         return serviceAppUser.findUserByUsername(appUser)
-                .map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NO_CONTENT));
+                .map(value -> ResponseEntity.ok(value))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @GetMapping
     public ResponseEntity<List<AppUser>> getAllUsers(){
-        return new ResponseEntity<>(serviceAppUser.getAllUsers(), HttpStatus.OK);
+        return ResponseEntity.ok(serviceAppUser.getAllUsers());
     }
 }
